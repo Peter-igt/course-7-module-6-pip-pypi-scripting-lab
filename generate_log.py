@@ -1,3 +1,4 @@
+
 from datetime import datetime
 import requests
 
@@ -15,14 +16,10 @@ def fetch_data():
     return {}
 
 
-def write_log(post):
-    """Write log information to a dated text file."""
-    log_data = [
-        "User logged in",
-        "User updated profile",
-        "Report exported",
-        f"Fetched Post Title: {post.get('title', 'No title found')}"
-    ]
+def generate_log(log_data):
+    """Write log entries to a dated text file and return the filename."""
+    if not isinstance(log_data, list):
+        raise ValueError("log_data must be a list")
 
     filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
 
@@ -30,13 +27,22 @@ def write_log(post):
         for entry in log_data:
             file.write(f"{entry}\n")
 
-    print(f"Log written to {filename}")
+    return filename
 
 
 def main():
     """Fetch API data and create the log file."""
     post = fetch_data()
-    write_log(post)
+
+    log_data = [
+        "User logged in",
+        "User updated profile",
+        "Report exported",
+        f"Fetched Post Title: {post.get('title', 'No title found')}"
+    ]
+
+    filename = generate_log(log_data)
+    print(f"Log written to {filename}")
 
 
 if __name__ == "__main__":
